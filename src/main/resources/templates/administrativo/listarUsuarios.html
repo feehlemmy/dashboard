@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<!--Import materialize.css-->
+<link type="text/css" rel="stylesheet" th:href="@{/css/materialize.min.css}" media="screen,projection" />
+<link type="text/css" rel="stylesheet" th:href="@{/css/administrativo.css}" />
+<!--Let browser know website is optimized for mobile-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Área Administrativa</title>
+</head>
+<body id="page-top">
+	<!-- Page Wrapper -->
+	<div id="wrapper">
+		<div th:replace="administrativo/menu :: nav-sidebar ">sidebar</div>
+	</div>
+	<!-- Content Wrapper -->
+	<section layout:fragment="listarUsuarios">
+		<div class="card"
+			style="width: 80%; margin-left: 10%; margin-top: 5%; background-image: linear-gradient(to right bottom, #041125, #191e2e, #2b2c37, #3b3b40, #4a4a4a);">
+			<div class="card-content">
+				<div class="">
+					<table class="">
+						<thead>
+							<tr>
+								<th style="color: #26a69a;">Id</th>
+								<th style="color: #26a69a;">Nome</th>
+								<th style="color: #26a69a;">Username</th>
+								<th style="color: #26a69a;">Visitante</th>
+								<th style="color: #26a69a;">Criador</th>
+								<th style="color: #26a69a;">Email</th>
+							</tr>
+						</thead>
+						<tbody id="listaUsuarios"></tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!--JavaScript at end of body for optimized loading-->
+	<script src="https://code.jquery.com/jquery-1.9.1.js"></script>
+	<script type="text/javascript" src="/js/materialize.min.js"></script>
+	<script type="text/javascript" charset="UTF-8">
+		var nome;
+		var foto;
+
+		$.ajax({
+			url : '/getPerfil',
+			type : 'GET',
+			success : function(perfil) {
+				nome = perfil[0].nome;
+				foto = perfil[0].foto;
+				$("#nomeUsuario").text(nome);
+				$("fotoUsuario").attr('src', foto);
+			}
+		});
+	</script>
+	<script>
+		document.addEventListener('DOMContentLoaded', function() {
+			var elems = document.querySelectorAll('.sidenav');
+			var instances = M.Sidenav.init(elems, 'left');
+		});
+
+		// Initialize collapsible (uncomment the lines below if you use the dropdown variation)
+		// var collapsibleElem = document.querySelector('.collapsible');
+		// var collapsibleInstance = M.Collapsible.init(collapsibleElem, options);
+
+		// Or with jQuery
+
+		$(document).ready(function() {
+			$('.sidenav').sidenav();
+		});
+	</script>
+	<script type="text/javascript">
+		var usuarios = [];
+
+		$('document').ready(function() {
+			$.ajax({
+				url : '/getUsuarios',
+				type : 'GET',
+				success : function(dataUsuarios) {
+					for (var i = 0; i < dataUsuarios.length; i++) {
+						usuarios.push(dataUsuarios[i]);
+					}
+					adicionarUsuarios();
+				}
+			});
+		});
+
+		function adicionarUsuarios() {
+			for (var i = 0; i < usuarios.length; i++) {
+				var usuario = usuarios[i];
+				$('#listaUsuarios').append(
+						'<tr class="clickable" style="color:#26a69a;">' +
+						'<td>' + usuario.id + '</td>' + 
+						'<td>'	+ usuario.nome + '</td>' + 
+						'<td>'	+ usuario.username + '</td>' + 
+						'<td>'	+ usuario.visitante + '</td>' + 
+					    '<td>'	+ usuario.usuarioCriador + '</td>' + 
+					    '<td>'	+ usuario.email + '</td>' + '</tr>');
+			}
+		}
+	</script>
+</body>
+</html>

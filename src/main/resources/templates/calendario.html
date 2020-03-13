@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<head>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!--Import materialize.css-->
+    <link type="text/css" rel="stylesheet" th:href="@{/css/materialize.min.css}" media="screen,projection" />
+    <link type="text/css" rel="stylesheet" th:href="@{/css/dashboardIndex.css}" />
+    <!--Let browser know website is optimized for mobile-->
+    <meta charset='utf-8' name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mentor Online</title>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script src="https://code.jquery.com/jquery-1.9.1.js"></script>
+    <script type="text/javascript" src="/js/materialize.min.js"></script>
+    <link th:href="@{/fullcalendar/packages/core/main.css}" rel='stylesheet' />
+    <link th:href="@{fullcalendar/packages/daygrid/main.css}" rel='stylesheet' />
+    <script src='/fullcalendar/packages/core/main.js'></script>
+    <script src='/fullcalendar/packages/daygrid/main.js'></script>
+    <script src='fullcalendar/packages/core/locales-all.js'></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.21.0/moment.min.js"></script>
+
+    <script type="text/javascript">
+
+        document.addEventListener('DOMContentLoaded', function () {
+            var elems = document.querySelectorAll('select');
+            var instances = M.FormSelect.init(elems, options);
+        });
+
+        // Or with jQuery
+
+        $(document).ready(function () {
+            $('select').formSelect();
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var calendarEl = document.getElementById('calendar');
+
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                plugins: ['dayGrid'],
+                locale: 'br'
+            });
+            calendar.setOption('locale', 'br');
+            getAllEvents();
+            var eventsOld = JSON.parse(localStorage.getItem("eventos"));
+            if (eventsOld != null) {
+                for (var i = 0; i < eventsOld.length; i++) {
+
+                    calendar.addEvent({
+                        title: eventsOld[i].titulo,
+                        start: eventsOld[i].data,
+                        allDay: true,
+                        backgroundColor: eventsOld[i].cor
+                    });
+                }
+            }
+       
+        
+
+            calendar.render();
+        });
+        function getAllEvents() {
+        	$.ajax({
+				url : '/getEventos',
+				type : 'GET',
+				success : function(eventos) {
+					localStorage.setItem("eventos", JSON.stringify(eventos));
+
+				}
+
+			});
+        }
+    </script>
+    <script type="text/javascript" charset="UTF-8">
+        var nome;
+        var foto;
+        $
+            .ajax({
+                url: '/getPerfil',
+                type: 'GET',
+                success: function (perfil) {
+                    nome = perfil[0].nome;
+                    foto = perfil[0].foto;
+                    $("#nomeUsuario").text(nome);
+                    var images_div = "<img th:src=\""
+                        + perfil[0].foto
+                        + "\"   class=\"responsive-img circle\" style=\"margin-left: 35%\">";
+                    $("#fotoUsuario").append(images_div)
+                }
+            });
+    </script>
+    <script>
+	document.addEventListener('DOMContentLoaded', function() {
+		var elems = document.querySelectorAll('.sidenav');
+		var instances = M.Sidenav.init(elems, 'left');
+	});
+
+	// Initialize collapsible (uncomment the lines below if you use the dropdown variation)
+	// var collapsibleElem = document.querySelector('.collapsible');
+	// var collapsibleInstance = M.Collapsible.init(collapsibleElem, options);
+
+	// Or with jQuery
+
+	$(document).ready(function() {
+		$('.sidenav').sidenav();
+	});
+	</script>
+    <script type="text/javascript">
+        document.addEventListener('DOMContentLoaded', function () {
+            var elems = document.querySelectorAll('.tooltipped');
+            var instances = M.Tooltip.init(elems, "left");
+        });
+
+        // Or with jQuery
+
+        $(document).ready(function () {
+            $('.tooltipped').tooltip();
+        });
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.modal').modal();
+            dismissible: true; // Modal can be dismissed by clicking outside of the modal
+
+        });
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#mySelect').change(function refreshPagina() {
+                document.getElementById('calendar').innerHTML = "";
+
+                var itemEscolhido = $(this).find('option:selected').val();
+                console.log(itemEscolhido);
+                var itemEscolhido = $(this).find(
+                    'option:selected').val();
+                $('#modal1 #idSentimento').val(
+                    $(this).find(
+                        'option:selected')
+                        .text());
+                if (itemEscolhido == 1) {
+
+                    document.getElementById("sentimentos").innerHTML = '<label> <input type="checkbox" id="amor"/> <span>AMOR – você sente que é guiado (a) pelo seu propósito de vida.</span></label> <p>\n\
+			    <label> <input type="checkbox" id="alegria" /> <span>ALEGRIA – Felicidade inabalável. Você sente que é guiado (a) pela sua intuição. Você se sente completo (a)</span></label> <p>\n\
+				<label> <input type="checkbox" id="paz" /> <span>PAZ – Serenidade constante. Nada te abala. Harmonia total com o Universo.</span></label> <p> \n\
+				<label> <input type="checkbox" id="iluminacao" /><span> ILUMINAÇÃO - Plena consciência. Você é Deus </span></label> <p>';
+
+                } else if (itemEscolhido == 2) {
+                    document.getElementById("sentimentos").innerHTML = '<label> <input type="checkbox" id="desamparado"/> <span>DESAMPARADO (A).</span></label> <p>\n\
+				    <label> <input type="checkbox" id="sem-esperanca" /> <span>SEM ESPERANÇA</span></label> <p>\n\
+					<label> <input type="checkbox" id="vitima" /> <span>VÍTIMA DO SISTEMA.</span></label> <p> \n\
+					<label> <input type="checkbox" id="vazio" /> <span>SENTIMENTO DE VAZIO</span></label> <p> \n\
+					<label> <input type="checkbox" id="nada" /><span>NÃO CONSIGO SENTIR NADA.</span></label> <p>\n\
+					<label> <input type="checkbox" id="desanimado" /><span>DESANIMADO – ABATIDO - DESINTERESSADO</span></label> <p>';
+                } else if (itemEscolhido == 3) {
+                    document.getElementById("sentimentos").innerHTML = '<label> <input type="checkbox" id="coragem"/> <span>Coragem.</span></label> <p>\n\
+					<label> <input type="checkbox" id="otimismo" /> <span>Otimismo</span></label> <p>\n\
+					<label> <input type="checkbox" id="confianca" /> <span>Confiança.</span></label> <p>';
+                } else if (itemEscolhido == 4) {
+                    document.getElementById("sentimentos").innerHTML = '<label> <input type="checkbox" id="vitima-sistema"/> <span>VÍTIMA DO SISTEMA (a culpa é do sistema)</span></label> <p>\n\
+				    <label> <input type="checkbox" id="fracassado" /> <span>FRACASSADO (A)</span></label> <p>\n\
+					<label> <input type="checkbox" id="remorco" /> <span>COM REMORSO (você fez algo ruim à outra pessoa).</span></label> <p> \n\
+					<label> <input type="checkbox" id="pecador" /> <span>PECADOR (A).</span></label> <p> \n\
+					<label> <input type="checkbox" id="ofendido" /><span>OFENDIDO (A).</span></label> <p>';
+                } else if (itemEscolhido == 5) {
+                    document.getElementById("sentimentos").innerHTML = '<label> <input type="checkbox" id="desejo"/> <span>DESEJO (A).</span></label> <p>\n\
+				    <label> <input type="checkbox" id="inveja" /> <span>INVEJA</span></label> <p>\n\
+					<label> <input type="checkbox" id="ciume" /> <span>CIÚME</span></label> <p> \n\
+					<label> <input type="checkbox" id="insatisfacao" /> <span>INSATISFAÇÃO - CARÊNCIA</span></label> <p> \n\
+					<label> <input type="checkbox" id="expectativa" /><span>EXPECTATIVA</span></label> <p>\n\
+					<label> <input type="checkbox" id="inspiracao" /><span>INSPIRAÇÃO</span></label> <p>';
+                } else if (itemEscolhido == 6) {
+                    document.getElementById("sentimentos").innerHTML = '<label> <input type="checkbox" id="medo"/> <span>MEDO.</span></label> <p>\n\
+				    <label> <input type="checkbox" id="ansiedade" /> <span>ANSIEDADE</span></label> <p>\n\
+					<label> <input type="checkbox" id="preocupacao" /> <span>PREOCUPAÇÃO</span></label> <p> \n\
+					<label> <input type="checkbox" id="estresse" /> <span>ESTRESSE</span></label> <p> \n\
+					<label> <input type="checkbox" id="ameacado" /><span>AMEAÇADO (A)</span></label> <p>\n\
+					<label> <input type="checkbox" id="inseguranca" /><span>INSEGURANÇA</span></label> <p>';
+                } else if (itemEscolhido == 8) {
+                    document.getElementById("sentimentos").innerHTML = '<label> <input type="checkbox" id="raiva"/> <span>COM RAIVA (passa rápido)</span></label> <p>\n\
+				    <label> <input type="checkbox" id="infeliz" /> <span>INFELIZ – FRUSTRADO (A)</span></label> <p>\n\
+					<label> <input type="checkbox" id="injusticado" /> <span>INJUSTIÇADO (A)</span></label> <p> \n\
+					<label> <input type="checkbox" id="odio" /> <span>ÓDIO (mais forte que a raiva e dura muito mais).</span></label> <p> \n\
+					<label> <input type="checkbox" id="motivado" /><span>MOTIVADO (A).</span></label> <p>';
+                } else if (itemEscolhido == 7) {
+                    document.getElementById("sentimentos").innerHTML = '<label> <input type="checkbox" id="neutralidade"/> <span>NEUTRALIDADE (você não sustenta discussões e não entra em brigas/discussões)</span></label> <p>\n\
+				    <label> <input type="checkbox" id="desapego" /> <span>DESAPEGO (nada sobe à sua cabeça, nem elogio, nem críticas, nem agressões verbais)</span></label> <p>\n\
+					<label> <input type="checkbox" id="boa-vontade" /> <span>IBOA VONTADE – DISPOSIÇÃO PARA AJUDAR </span></label> <p> \n\
+					<label> <input type="checkbox" id="aceitacao" /> <span>ACEITAÇÃO - COMPREENSÃO DA VIDA E DO MUNDO</span></label> <p> \n\
+					<label> <input type="checkbox" id="razao" /><span>RAZÃO – QUE FAZER CONTRIBUIÇÕES SIGNIFICATIVAS PARA A HUMANIDADE.</span></label> <p>';
+                } else if (itemEscolhido == 9) {
+                    document.getElementById("sentimentos").innerHTML = '<label> <input type="checkbox" id="triste"/> <span>TRISTE</span></label> <p>\n\
+				    <label> <input type="checkbox" id="perdido" /> <span>PERDIDO (A)</span></label> <p>\n\
+					<label> <input type="checkbox" id="desanimado" /> <span>DESANIMADO (A)</span></label> <p> \n\
+					<label> <input type="checkbox" id="magoado" /> <span>MAGOADO (A)</span></label> <p> \n\
+					<label> <input type="checkbox" id="deprimido" /><span>DEPRIMIDO (A)</span></label> <p>\n\
+					<label> <input type="checkbox" id="arrependido" /><span>ARREPENDIDO (A) (você fez algo ruim a si próprio)</span></label> <p>';
+                } else if (itemEscolhido == 10) {
+                    document.getElementById("sentimentos").innerHTML = '<label> <input type="checkbox" id="timidez"/> <span>TIMIDEZ</span></label> <p>\n\
+				    <label> <input type="checkbox" id="falta-confianca" /> <span>FALTA DE CONFIANÇA</span></label> <p>\n\
+					<label> <input type="checkbox" id="humilhacao" /> <span>HUMILHAÇÃO</span></label> <p> \n\
+					<label> <input type="checkbox" id="sumir" /> <span>VONTADE DE SUMIR</span></label> <p> \n\
+					<label> <input type="checkbox" id="matar" /><span>VONTADE DE SE MATAR</span></label> <p>\n\
+					<label> <input type="checkbox" id="odio-voce" /><span>ÓDIO DE VOCÊ MESMO (A) (você fez algo ruim a si próprio)</span></label> <p>';
+                } else if (itemEscolhido == 11) {
+                    document.getElementById("sentimentos").innerHTML = '<label> <input type="checkbox" id="orgulho"/> <span>ORGULHO</span></label> <p>\n\
+				    <label> <input type="checkbox" id="desprezo" /> <span>DESPREZO (você se achou melhor que o outro)</span></label> <p>\n\
+					<label> <input type="checkbox" id="desdem" /> <span>DESDÉM (você diminuiu o outro)</span></label> <p> \n\
+					<label> <input type="checkbox" id="indiferenca" /> <span>INDIFERENÇA (você ignorou o outro)</span></label> <p> \n\
+					<label> <input type="checkbox" id="admiracao" /><span>ADMIRAÇÃO</span></label> <p>';
+                }
+            })
+        });
+    </script>
+    <script type="text/javascript">
+        function Evento() {
+            var titulo;
+            var data;
+            var cor;
+        }
+        function addEvent() {
+			getAllEvents();
+            var master = document.getElementById("idSentimento").value;
+            var calendarEl = document.getElementById("calendar");
+            var Hoje = new Date();
+            var today = Hoje.toLocaleDateString();
+            var titleEvent;
+            var EventColor;
+            var azul = "#33C4FF" //AZUL
+            var verde = "#3EEF11" //VERDE
+            var vermelho = "#FD0000" //VERMELHO
+            var eventos = new Array();
+            var evento;
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                plugins: ['dayGrid'],
+                defaultView: 'dayGridMonth',
+                header: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                },
+                locale: 'br'
+            });
+            if (master == "Amor") {
+                if (document.getElementById("alegria").checked == true) {
+                    titleEvent = "Alegria"
+                    eventColor = azul
+
+                    evento = new Evento()
+                    evento.titulo = titleEvent;
+                    evento.cor = eventColor;
+                    evento.data = dateToEN(today);
+                    eventos.push(evento);
+
+                    today = somaDias(today, 1);
+                    evento = new Evento()
+                    evento.titulo = titleEvent;
+                    evento.cor = eventColor;
+                    evento.data = dateToEN(today);
+                    eventos.push(evento);
+                    
+                    apagaSentimentoVermelho(3);
+
+                }
+                if (document.getElementById("amor").checked == true) {
+                    titleEvent = "Amor"
+                    eventColor = azul
+
+                    evento = new Evento()
+                    evento.titulo = titleEvent;
+                    evento.cor = eventColor;
+                    evento.data = dateToEN(today);
+                    eventos.push(evento);
+                    
+                    apagaSentimentoVermelho(2);
+      
+                }
+                if (document.getElementById("paz").checked == true) {
+                    titleEvent = "Paz"
+                    eventColor = azul
+
+                    evento = new Evento()
+                    evento.titulo = titleEvent;
+                    evento.cor = eventColor;
+                    evento.data = dateToEN(today);
+                    eventos.push(evento);
+
+                    
+                    today = somaDias(today, 1);
+                    evento = new Evento()
+                    evento.titulo = titleEvent;
+                    evento.cor = eventColor;
+                    evento.data = dateToEN(today);
+                    eventos.push(evento);
+                    
+                    today = somaDias(today, 1);
+                    evento = new Evento()
+                    evento.titulo = titleEvent;
+                    evento.cor = eventColor;
+                    evento.data = dateToEN(today);
+                    eventos.push(evento);
+                    
+                    apagaSentimentoVermelho(4);
+
+                }
+                if (document.getElementById("iluminacao").checked == true) {
+                    titleEvent = "Iluminação"
+                    eventColor = "#FFC300"
+					var iluminado = iluminacao(dateToEN(today).substring(5,7))
+                    if(iluminado == true){
+                    evento = new Evento()
+                    evento.titulo = titleEvent;
+                    evento.cor = eventColor;
+                    evento.data = dateToEN(today);
+                    eventos.push(evento);
+
+                    
+                    today = somaDias(today, 1);
+                    evento = new Evento()
+                    evento.titulo = titleEvent;
+                    evento.cor = eventColor;
+                    evento.data = dateToEN(today);
+                    eventos.push(evento);
+                    
+                    today = somaDias(today, 1);
+                    evento = new Evento()
+                    evento.titulo = titleEvent;
+                    evento.cor = eventColor;
+                    evento.data = dateToEN(today);
+                    eventos.push(evento);
+                    
+                    today = somaDias(today, 1);
+                    evento = new Evento()
+                    evento.titulo = titleEvent;
+                    evento.cor = eventColor;
+                    evento.data = dateToEN(today);
+                    eventos.push(evento);
+                    }
+                }
+            } else if (master == "Raiva") {
+                if (document.getElementById("raiva").checked == true) {
+                    titleEvent = "Raiva"
+                    eventColor = verde
+
+                    evento = new Evento()
+                    evento.titulo = titleEvent;
+                    evento.cor = eventColor;
+                    evento.data = dateToEN(today);
+                    eventos.push(evento);
+
+                }
+                if (document.getElementById("infeliz").checked == true) {
+                    titleEvent = "Infeliz"
+                    eventColor = verde
+
+                    evento = new Evento()
+                    evento.titulo = titleEvent;
+                    evento.cor = eventColor;
+                    evento.data = dateToEN(today);
+                    eventos.push(evento);
+
+                }
+                if (document.getElementById("injusticado").checked == true) {
+                    titleEvent = "Injustiçado"
+                    eventColor = verde
+                    evento = new Evento()
+                    evento.titulo = titleEvent;
+                    evento.cor = eventColor;
+                    evento.data = dateToEN(today);
+                    eventos.push(evento);
+
+                    
+                }
+                if (document.getElementById("motivado").checked == true) {
+                    titleEvent = "Motivado"
+                    eventColor = azul
+
+                    evento = new Evento()
+                    evento.titulo = titleEvent;
+                    evento.cor = eventColor;
+                    evento.data = dateToEN(today);
+                    eventos.push(evento);
+
+                 
+                }
+                if (document.getElementById("odio").checked == true) {
+                    titleEvent = "Ódio"
+                    eventColor = vermelho
+
+                    evento = new Evento()
+                    evento.titulo = titleEvent;
+                    evento.cor = eventColor;
+                    evento.data = dateToEN(today);
+                    eventos.push(evento);
+
+                }
+            } else if (master == "Apatia") {
+                if (document.getElementById("desamparado").checked == true) {
+                    titleEvent = "Desamparado"
+                    eventColor = vermelho
+
+                    evento = new Evento()
+                    evento.titulo = titleEvent;
+                    evento.cor = eventColor;
+                    evento.data = dateToEN(today);
+                    eventos.push(evento);
+                }
+                if (document.getElementById("sem-esperanca").checked == true) {
+                    titleEvent = "Sem Esperanca"
+                    eventColor = vermelho
+
+                    evento = new Evento()
+                    evento.titulo = titleEvent;
+                    evento.cor = eventColor;
+                    evento.data = dateToEN(today);
+                    eventos.push(evento);
+                }
+                if (document.getElementById("vitima").checked == true) {
+                    titleEvent = "Vítima do Sistema"
+                    eventColor = vermelho
+
+                    evento = new Evento()
+                    evento.titulo = titleEvent;
+                    evento.cor = eventColor;
+                    evento.data = dateToEN(today);
+                    eventos.push(evento);
+                }
+                if (document.getElementById("vazio").checked == true) {
+                    titleEvent = "Sentimento de Vazio"
+                    eventColor = vermelho
+
+                    evento = new Evento()
+                    evento.titulo = titleEvent;
+                    evento.cor = eventColor;
+                    evento.data = dateToEN(today);
+                    eventos.push(evento);
+
+                }
+                if (document.getElementById("nada").checked == true) {
+                    titleEvent = "Não Consigo sentir nada"
+                    eventColor = vermelho
+
+                    evento = new Evento()
+                    evento.titulo = titleEvent;
+                    evento.cor = eventColor;
+                    evento.data = dateToEN(today);
+                    eventos.push(evento);
+                }
+                if (document.getElementById("desanimado").checked == true) {
+                    titleEvent = "Desanimado - Abatido - Desinteressado"
+                    eventColor = vermelho
+
+                    evento = new Evento()
+                    evento.titulo = titleEvent;
+                    evento.cor = eventColor;
+                    evento.data = dateToEN(today);
+                    eventos.push(evento);
+                }
+            } else if (master == "Coragem") {
+                if (document.getElementById("coragem").checked == true) {
+                    titleEvent = "Coragem"
+                    eventColor = verde
+
+                    evento = new Evento()
+                    evento.titulo = titleEvent;
+                    evento.cor = eventColor;
+                    evento.data = dateToEN(today);
+                    eventos.push(evento);
+                }
+                if (document.getElementById("otimismo").checked == true) {
+                    titleEvent = "Otimismo"
+                    eventColor = vermelho
+
+                    evento = new Evento()
+                    evento.titulo = titleEvent;
+                    evento.cor = eventColor;
+                    evento.data = dateToEN(today);
+                    eventos.push(evento);
+                }
+                if (document.getElementById("confianca").checked == true) {
+                    titleEvent = "Confiança"
+                    eventColor = vermelho
+
+                    evento = new Evento()
+                    evento.titulo = titleEvent;
+                    evento.cor = eventColor;
+                    evento.data = dateToEN(today);
+                    eventos.push(evento);
+
+                }
+            } else if (master == "Culpa") {
+                if (document.getElementById("vitima-sistema").checked == true) {
+                    titleEvent = "Vítima do Sistema"
+                    eventColor = vermelho
+
+                    evento = new Evento()
+                    evento.titulo = titleEvent;
+                    evento.cor = eventColor;
+                    evento.data = dateToEN(today);
+                    eventos.push(evento);
+                    today = somaDias(today, 1);
+                    evento = new Evento()
+                    evento.titulo = titleEvent;
+                    evento.cor = eventColor;
+                    evento.data = dateToEN(today);
+                    eventos.push(evento);
+
+                }
+                if (document.getElementById("fracassado").checked == true) {
+                    titleEvent = "Fracassado"
+                    eventColor = vermelho
+
+                    evento = new Evento()
+                    evento.titulo = titleEvent;
+                    evento.cor = eventColor;
+                    evento.data = dateToEN(today);
+                    eventos.push(evento);
+                }
+                if (document.getElementById("remorco").checked == true) {
+                    titleEvent = "Remorço"
+                    eventColor = vermelho
+
+                    evento = new Evento()
+                    evento.titulo = titleEvent;
+                    evento.cor = eventColor;
+                    evento.data = dateToEN(today);
+                    eventos.push(evento);
+
+                }
+                if (document.getElementById("pecador").checked == true) {
+                    titleEvent = "Pecador"
+                    eventColor = vermelho
+
+                    evento = new Evento()
+                    evento.titulo = titleEvent;
+                    evento.cor = eventColor;
+                    evento.data = dateToEN(today);
+                    eventos.push(evento);
+                    today = somaDias(today, 1);
+                    evento = new Evento()
+                    evento.titulo = titleEvent;
+                    evento.cor = eventColor;
+                    evento.data = dateToEN(today);
+                    eventos.push(evento);
+
+                }
+                if (document.getElementById("ofendido").checked == true) {
+                    titleEvent = "Ofendido"
+                    eventColor = vermelho
+
+                    evento = new Evento()
+                    evento.titulo = titleEvent;
+                    evento.cor = eventColor;
+                    evento.data = dateToEN(today);
+                    eventos.push(evento);
+
+                }
+            } else if (master == "Desejo") {
+                if (document.getElementById("desejo").checked == true) {
+                    titleEvent = "Desejo"
+                    eventColor = vermelho
+
+                    evento = new Evento()
+                    evento.titulo = titleEvent;
+                    evento.cor = eventColor;
+                    evento.data = dateToEN(today);
+                    eventos.push(evento);
+                }
+                if (document.getElementById("inveja").checked == true) {
+                    titleEvent = "Inveja"
+                    eventColor = vermelho
+
+                    evento = new Evento()
+                    evento.titulo = titleEvent;
+                    evento.cor = eventColor;
+                    evento.data = dateToEN(today);
+                    eventos.push(evento);
+                }
+                if (document.getElementById("ciume").checked == true) {
+                    titleEvent = "Ciúme"
+                    eventColor = vermelho
+                    evento = new Evento()
+                    evento.titulo = titleEvent;
+                    evento.cor = eventColor;
+                    evento.data = dateToEN(today);
+                    eventos.push(evento);
+                }
+                if (document.getElementById("insatisfacao").checked == true) {
+                    titleEvent = "INSATISFAÇÃO - CARÊNCIA"
+                    eventColor = vermelho
+
+                    evento = new Evento()
+                    evento.titulo = titleEvent;
+                    evento.cor = eventColor;
+                    evento.data = dateToEN(today);
+                    eventos.push(evento);
+                }
+                if (document.getElementById("expectativa").checked == true) {
+                    titleEvent = "EXPECTATIVA"
+                    eventColor = azul
+
+                    evento = new Evento()
+                    evento.titulo = titleEvent;
+                    evento.cor = eventColor;
+                    evento.data = dateToEN(today);
+                    eventos.push(evento);
+                }
+                if (document.getElementById("inspiracao").checked == true) {
+                    titleEvent = "INSPIRAÇÃO"
+                    eventColor = azul
+
+                    evento = new Evento()
+                    evento.titulo = titleEvent;
+                    evento.cor = eventColor;
+                    evento.data = dateToEN(today);
+                    eventos.push(evento);
+                }
+            } else if (master == "Medo") {
+                if (document.getElementById("medo").checked == true) {
+                    titleEvent = "Medo"
+                    eventColor = vermelho
+
+                    evento = new Evento()
+                    evento.titulo = titleEvent;
+                    evento.cor = eventColor;
+                    evento.data = dateToEN(today);
+                    eventos.push(evento);
+                }
+                if (document.getElementById("ansiedade").checked == true) {
+                    titleEvent = "Ansiedade"
+                    eventColor = vermelho
+
+                    evento = new Evento()
+                    evento.titulo = titleEvent;
+                    evento.cor = eventColor;
+                    evento.data = dateToEN(today);
+                    eventos.push(evento);
+                }
+                if (document.getElementById("preocupacao").checked == true) {
+                    titleEvent = "Preocupação"
+                    eventColor = vermelho
+                    evento = new Evento()
+                    evento.titulo = titleEvent;
+                    evento.cor = eventColor;
+                    evento.data = dateToEN(today);
+                    eventos.push(evento);
+                }
+                if (document.getElementById("estresse").checked == true) {
+                    titleEvent = "Estresse"
+                    eventColor = vermelho
+
+                    evento = new Evento()
+                    evento.titulo = titleEvent;
+                    evento.cor = eventColor;
+                    evento.data = dateToEN(today);
+                    eventos.push(evento);
+                }
+                if (document.getElementById("ameacado").checked == true) {
+                    titleEvent = "Ameaçado"
+                    eventColor = vermelho
+
+                    evento = new Evento()
+                    evento.titulo = titleEvent;
+                    evento.cor = eventColor;
+                    evento.data = dateToEN(today);
+                    eventos.push(evento);
+                }
+                if (document.getElementById("inseguranca").checked == true) {
+                    titleEvent = "Insegurança"
+                    eventColor = vermelho
+
+                    evento = new Evento()
+                    evento.titulo = titleEvent;
+                    evento.cor = eventColor;
+                    evento.data = dateToEN(today);
+                    eventos.push(evento);
+                }
+            } else if (master == "Neutralidade") {
+                if (document.getElementById("neutralidade").checked == true) {
+                    titleEvent = "Neutralidade"
+                    eventColor = verde
+
+                    evento = new Evento()
+                    evento.titulo = titleEvent;
+                    evento.cor = eventColor;
+                    evento.data = dateToEN(today);
+                    eventos.push(evento);
+                }
+                if (document.getElementById("desapego").checked == true) {
+                    titleEvent = "DESAPEGO"
+                    eventColor = verde
+
+                    evento = new Evento()
+                    evento.titulo = titleEvent;
+                    evento.cor = eventColor;
+                    evento.data = dateToEN(today);
+                    eventos.push(evento);
+                }
+                if (document.getElementById("boa-vontade").checked == true) {
+                    titleEvent = "BOA VONTADE"
+                    eventColor = verde
+                    evento = new Evento()
+                    evento.titulo = titleEvent;
+                    evento.cor = eventColor;
+                    evento.data = dateToEN(today);
+                    eventos.push(evento);
+                }
+                if (document.getElementById("aceitacao").checked == true) {
+                    titleEvent = "ACEITAÇÃO"
+                    eventColor = vermelho
+
+                    evento = new Evento()
+                    evento.titulo = titleEvent;
+                    evento.cor = eventColor;
+                    evento.data = dateToEN(today);
+                    eventos.push(evento);
+                }
+                if (document.getElementById("razao").checked == true) {
+                    titleEvent = "Razão"
+                    eventColor = verde
+
+                    evento = new Evento()
+                    evento.titulo = titleEvent;
+                    evento.cor = eventColor;
+                    evento.data = dateToEN(today);
+                    eventos.push(evento);
+                }
+            } else if (master == "Tristeza") {
+                if (document.getElementById("triste").checked == true) {
+                    titleEvent = "Triste"
+                    eventColor = vermelho
+
+                    evento = new Evento()
+                    evento.titulo = titleEvent;
+                    evento.cor = eventColor;
+                    evento.data = dateToEN(today);
+                    eventos.push(evento);
+                }
+                if (document.getElementById("perdido").checked == true) {
+                    titleEvent = "Perdido"
+                    eventColor = vermelho
+
+                    evento = new Evento()
+                    evento.titulo = titleEvent;
+                    evento.cor = eventColor;
+                    evento.data = dateToEN(today);
+                    eventos.push(evento);
+                }
+                if (document.getElementById("desanimado").checked == true) {
+                    titleEvent = "Desanimado"
+                    eventColor = vermelho
+                    evento = new Evento()
+                    evento.titulo = titleEvent;
+                    evento.cor = eventColor;
+                    evento.data = dateToEN(today);
+                    eventos.push(evento);
+                }
+                if (document.getElementById("magoado").checked == true) {
+                    titleEvent = "Magoado"
+                    eventColor = vermelho
+
+                    evento = new Evento()
+                    evento.titulo = titleEvent;
+                    evento.cor = eventColor;
+                    evento.data = dateToEN(today);
+                    eventos.push(evento);
+                }
+                if (document.getElementById("deprimido").checked == true) {
+                    titleEvent = "Deprimido"
+                    eventColor = vermelho
+
+                    evento = new Evento()
+                    evento.titulo = titleEvent;
+                    evento.cor = eventColor;
+                    evento.data = dateToEN(today);
+                    eventos.push(evento);
+                }
+                if (document.getElementById("arrependido").checked == true) {
+                    titleEvent = "Arrependido"
+                    eventColor = vermelho
+
+                    evento = new Evento()
+                    evento.titulo = titleEvent;
+                    evento.cor = eventColor;
+                    evento.data = dateToEN(today);
+                    eventos.push(evento);
+                }
+            } else if (master == "Vergonha") {
+                if (document.getElementById("timidez").checked == true) {
+                    titleEvent = "Timidez"
+                    eventColor = vermelho
+
+                    evento = new Evento()
+                    evento.titulo = titleEvent;
+                    evento.cor = eventColor;
+                    evento.data = dateToEN(today);
+                    eventos.push(evento);
+                }
+                if (document.getElementById("falta-confianca").checked == true) {
+                    titleEvent = "Falta de Confiança"
+                    eventColor = vermelho
+
+                    evento = new Evento()
+                    evento.titulo = titleEvent;
+                    evento.cor = eventColor;
+                    evento.data = dateToEN(today);
+                    eventos.push(evento);
+                }
+                if (document.getElementById("humilhacao").checked == true) {
+                    titleEvent = "Humilhação"
+                    eventColor = vermelho
+                    evento = new Evento()
+                    evento.titulo = titleEvent;
+                    evento.cor = eventColor;
+                    evento.data = dateToEN(today);
+                    eventos.push(evento);
+                }
+                if (document.getElementById("sumir").checked == true) {
+                    titleEvent = "Vontade de Sumir"
+                    eventColor = vermelho
+
+                    evento = new Evento()
+                    evento.titulo = titleEvent;
+                    evento.cor = eventColor;
+                    evento.data = dateToEN(today);
+                    eventos.push(evento);
+                }
+                if (document.getElementById("matar").checked == true) {
+                    titleEvent = "Vontade de se Matar"
+                    eventColor = vermelho
+                    evento = new Evento()
+                    evento.titulo = titleEvent;
+                    evento.cor = eventColor;
+                    evento.data = dateToEN(today);
+                    eventos.push(evento);
+                    today = somaDias(today, 1);
+                    evento = new Evento()
+                    evento.titulo = titleEvent;
+                    evento.cor = eventColor;
+                    evento.data = dateToEN(today);
+                    eventos.push(evento);
+                    today = somaDias(today, 1);
+                    evento = new Evento()
+                    evento.titulo = titleEvent;
+                    evento.cor = eventColor;
+                    evento.data = dateToEN(today);
+                    eventos.push(evento);
+                }
+                if (document.getElementById("odio-voce").checked == true) {
+                    titleEvent = "ÓDIO DE VOCÊ MESMO"
+                    eventColor = vermelho
+                    evento = new Evento()
+                    evento.titulo = titleEvent;
+                    evento.cor = eventColor;
+                    evento.data = dateToEN(today);
+                    eventos.push(evento);
+                }
+            } else if (master == "Orgulho") {
+                if (document.getElementById("orgulho").checked == true) {
+                    titleEvent = "Orgulho"
+                    eventColor = verde
+                    evento = new Evento()
+                    evento.titulo = titleEvent;
+                    evento.cor = eventColor;
+                    evento.data = dateToEN(today);
+                    eventos.push(evento);
+                }
+                if (document.getElementById("desprezo").checked == true) {
+                    titleEvent = "Desprezo"
+                    eventColor = verde
+                    evento = new Evento()
+                    evento.titulo = titleEvent;
+                    evento.cor = eventColor;
+                    evento.data = dateToEN(today);
+                    eventos.push(evento);
+                }
+                if (document.getElementById("desdem").checked == true) {
+                    titleEvent = "Desdém"
+                    eventColor = vermelho
+                    evento = new Evento()
+                    evento.titulo = titleEvent;
+                    evento.cor = eventColor;
+                    evento.data = dateToEN(today);
+                    eventos.push(evento);
+                }
+                if (document.getElementById("indiferenca").checked == true) {
+                    titleEvent = "Indiferença"
+                    eventColor = verde
+                    evento = new Evento()
+                    evento.titulo = titleEvent;
+                    evento.cor = eventColor;
+                    evento.data = dateToEN(today);
+                    eventos.push(evento);
+                }
+                if (document.getElementById("admiracao").checked == true) {
+                    titleEvent = "Admiração"
+                    eventColor = azul
+                    evento = new Evento()
+                    evento.titulo = titleEvent;
+                    evento.cor = eventColor;
+                    evento.data = dateToEN(today);
+                    eventos.push(evento);
+                }
+            }
+            calendar.setOption('locale', 'br');
+            drawEvents(calendar, eventos);
+        }
+        
+
+        function iluminacao(mes) {
+        	var mes;
+        	var iluminado = false;
+        	getAllEvents();
+        	var eventos = JSON.parse(localStorage.getItem("eventos"));
+        
+            for (var i = 0; i < eventos.length; i++) {
+                if(eventos[i].data.substring(5,7) == mes){
+					if(eventos[i].cor !=  "#FD0000"){
+						iluminado = true;
+					}else{
+						iluminado = false;
+						break;
+					}
+                }
+            }
+            return iluminado;
+        }
+
+        function drawEvents(calendar, eventos) {
+            for (var i = 0; i < eventos.length; i++) {
+                saveEvents(eventos[i]);
+
+                calendar.addEvent({
+                    title: eventos[i].titulo,
+                    start: eventos[i].data,
+                    allDay: true,
+                    backgroundColor: eventos[i].cor
+                });
+            }
+            var eventsOld = JSON.parse(localStorage.getItem("eventos"));
+            if (eventsOld != null) {
+                for (var i = 0; i < eventsOld.length; i++) {
+
+                    calendar.addEvent({
+                        title: eventsOld[i].titulo,
+                        start: eventsOld[i].data,
+                        allDay: true,
+                        backgroundColor: eventsOld[i].cor
+                    });
+                }
+            }
+            calendar.render();
+        }
+        function apagaSentimentoVermelho(total) {
+        	var eventsOld = JSON.parse(localStorage.getItem("eventos"));
+        	var eventosAtualizados = new Array()
+            if (eventsOld != null) {
+            	var cont = 0;
+            
+                for (var i = 0; i < eventsOld.length; i++) {
+					if(eventsOld[i].cor == "#FD0000"  && cont < total){
+                    	cont++;
+                    	deleteEvents(eventsOld[i].id)
+                    }else{
+                    	eventosAtualizados.push(eventsOld[i]);
+                    	localStorage.setItem("eventos", JSON.stringify(eventosAtualizados));
+                    }
+                }
+                
+            }
+            }
+        
+        function deleteEvents(id) {
+        	$.ajax({
+        	      type : "DELETE",
+        	      url : "/deleteEvento/" + id,
+        	      success: function(resultMsg){
+ 					console.log("sucess")
+                }
+            });
+        }
+        function getAllEvents() {
+        	$.ajax({
+				url : '/getEventos',
+				type : 'GET',
+				success : function(eventos) {
+	                console.log(eventos);
+					localStorage.setItem("eventos", JSON
+							.stringify(eventos));
+
+				}
+
+			});
+        }
+        function saveEvents(eventos) {
+            	var titulo = eventos.titulo;
+            	var data = eventos.data;
+            	var cor = eventos.cor 
+
+            	$.ajax({
+                    type: 'POST',
+                    url: '/saveEvent',
+                    data: {
+                    	titulo, data, cor
+                    },
+                    success: function (msg) {
+     					console.log("sucess")
+                    }
+                });
+            }
+        
+        function dateToEN(today) {
+            return today.split('/').reverse().join('-');
+        }
+        function somaDias(dt, qtd) {
+            var dt1 = dt.split("/");
+            var hj1 = dt1[2] + "-" + dt1[1] + "-" + dt1[0];
+            var dtat = new Date(hj1);
+            dtat.setDate(dtat.getDate());
+            var myDate = new Date(hj1);
+            myDate.setDate(myDate.getDate() + (qtd + 1));
+            var ano = myDate.getFullYear();
+            var dia = myDate.getDate(); if (dia < 10) { dia = '0' + dia };
+            var mes = (myDate.getMonth() + 1); if (mes < 10) { mes = '0' + mes }
+            return (dia + "/" + mes + "/" + ano);
+        }
+    </script>
+    <script type="text/javascript">
+        $.ajax({
+            url: '/getFrases',
+            type: 'GET',
+            success: function (frases) {
+                localStorage.setItem("frases", JSON.stringify(frases));
+
+            }
+        });
+    </script>
+    <script type="text/javascript">
+
+        function fraseDoDia() {
+            var frases = JSON.parse(localStorage.getItem("frases"));
+            var number = Math.floor(Math.random() * 365 + 1);
+            M.toast({ html: frases[number].frase })
+        }
+    </script>
+</head>
+
+<body>
+    <div th:replace="dashboard/menu :: nav-sidebar ">sidebar</div>
+    <div class="container">
+        <div class="col s12">
+            <div class="row">
+                <div class="input-field col s6">
+                    <select id="mySelect" style="color: #26a69a;">
+                        <option value="0" style="color: #26a69a;" disabled selected >Selecione um Sentimento</option>
+                        <option value="1" style="color: #26a69a;">Amor</option>
+                        <option value="2" style="color: #26a69a;">Apatia</option>
+                        <option value="3" style="color: #26a69a;">Coragem</option>
+                        <option value="4" style="color: #26a69a;">Culpa</option>
+                        <option value="5" style="color: #26a69a;">Desejo</option>
+                        <option value="6" style="color: #26a69a;">Medo</option>
+                        <option value="7" style="color: #26a69a;">Neutralidade</option>
+                        <option value="8" style="color: #26a69a;">Raiva</option>
+                        <option value="9" style="color: #26a69a;">Tristeza</option>
+                        <option value="10" style="color: #26a69a;">Vergonha</option>
+                        <option value="11" style="color: #26a69a;">Orgulho</option>
+                    </select><label style="color: #26a69a;">Selecione o sentimento</label>
+                </div>
+                <div></div>
+                <div>
+                    <button data-target="modal1" href="modal1" class=" modal-trigger btn waves-effect  col s4"
+                        style="margin-top: 2%; margin-left: 5%; background-color: #26a69a;" type="submit"
+                        id="novaSentimento" name="action">Novo Sentimento</button>
+                </div>
+                <div>
+                    <button class=" btn waves-effect  col s4"
+                        style="margin-top: 2%; margin-left: 5%; background-color: #26a69a;" id="frase-dia"
+                        onclick="fraseDoDia()" name="action">Frase do Dia</button>
+                </div>
+            </div>
+        </div>
+        <div id='calendar'></div>
+        <!-- Modal Carreira -->
+        <div id="modal1" class="modal">
+            <div class="modal-content">
+                <h4>O que você sentiu hoje?</h4>
+                <div class="col s12 ">
+                    <input type=hidden id="idSentimento" />
+                    <div class="row">
+                        <div id='sentimentos'></div>
+                    </div>
+                    <div class="row col s12">
+                        <button class="btn waves-effect  col s7" style="background-color: #26a69a;" id="submit"
+                            onclick="addEvent()" name="action">
+                            Salvar <i class="material-icons right">send</i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+     <!-- Modal Structure -->
+  <div id="modalShare" class="modal">
+    <div class="modal-content">
+     			<h4>Compartilhe</h4>
+				<div class="col s12 ">
+					<form class="form" th:action="@{/compartilhar}" method="POST" action="">
+						<div class="row">
+							<div class="input-field col s12">
+								<input id="nome" name="nome" type="text" class="validate"><label for="nome" style="color: #26a69a;">Nome da
+									Pessoa</label>
+							</div>
+							<div class="input-field col s12">
+								<input id="username" name="username" type="text" class="validate"><label for="username" style="color: #26a69a;">Username</label>
+							</div>
+							<div class="input-field col s12">
+								<input id="email" name="email" type="text" class="validate"><label for="email" style="color: #26a69a;">Email</label>
+							</div>
+						</div>
+						<div class="row col s12">
+							<button class="btn waves-effect  col s7" style="background-color: #26a69a;" type="submit" id="submit" name="action">
+								Salvar <i class="material-icons right">send</i>
+							</button>
+						</div>
+					</form>
+				</div>
+  </div>
+	</div>
+</body>

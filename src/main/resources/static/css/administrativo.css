@@ -1,0 +1,40 @@
+html {
+	background-image: linear-gradient(to right bottom, #041125, #191e2e, #2b2c37, #3b3b40,
+		#4a4a4a);
+	height: 100%;
+	width: 100%;
+}
+
+#nav-bar {
+	background-color: #26a69a;
+}
+
+#user-view {
+	background-image: linear-gradient(to right, #26a69a, #25999b, #308c97, #3d7e8f, #477183);
+}
+
+#cadastro-form {
+	height: 0;
+	position: absolute;
+	top: 50%;
+	/* posiciona na metade da tela */
+	margin-top: -10%;
+	/* e retrocede metade da altura */
+	left: 50%;
+	/* posiciona na metade da tela */
+	margin-left: -15%;
+	/* e retrocede metade da largura */
+}
+
+#editar-form {
+	height: 0;
+	position: absolute;
+	top: 50%;
+	/* posiciona na metade da tela */
+	margin-top: -10%;
+	/* e retrocede metade da altura */
+	left: 50%;
+	/* posiciona na metade da tela */
+	margin-left: -15%;
+	/* e retrocede metade da largura */
+}

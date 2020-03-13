@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<link type="text/css" rel="stylesheet" th:href="@{/css/dashboardIndex.css}"/>
+</head>
+<body>
+	<div th:fragment="nav-sidebar">
+		<nav>
+			<div class="nav-wrapper" id="nav-bar">
+				<div class="col s12">
+					<button href="#" data-target="slide-out"
+						class="sidenav-trigger waves-effect waves-teal btn-flat "
+						style="color: #FFFF;">
+						<i class="material-icons">dehaze</i>
+					</button>
+				</div>
+			</div>
+		</nav>
+		<!-- Dropdown Structure -->
+		<ul id="slide-out" class="sidenav">
+			<li><div id="user-view" st class="user-view">
+					<span href="#user" >
+						<div id="fotoUsuario">
+						</div>
+					</span> 
+					
+					<span id="nomeUsuario"
+						style="margin-left: 30%" class="white-text"></span>
+				</div></li>
+			<li><div class="divider"></div></li>
+			<li><a href="/dashboardIndex" style="color: #26a69a;"><i
+					class="material-icons">next_week</i>Empreendimentos</a></li>
+			<li><a href="carreira" style="color: #26a69a;"><i
+					class="material-icons">school</i> Carreira</a></li>
+					<li><a href="espiral" style="color: #26a69a;"><i
+					class="material-icons">pie_chart</i> Espiral</a></li>
+					<li><a href="calendario" style="color: #26a69a;"><i
+					class="material-icons">today</i> Calendario</a></li>
+			<li><div class="divider"></div></li>
+			<li><a href="/editarPerfilAdministrador" style="color: #26a69a;">
+					<i class="material-icons">edit</i>Editar Perfil
+			</a></li>
+			<!-- Modal Trigger -->
+ 		 <li><a class="waves-effect waves-light btn modal-trigger" href="#modalShare">   <i class="material-icons">share</i>
+ 		 Compartilhar </a></li>
+ 		 <li><a href="/sair" class="waves-effect waves-light btn"><i class="material-icons">exit_to_app</i>Sair</a></li>
+ 		 
+		</ul>
+	</div>
+	
+</body>
+</html>

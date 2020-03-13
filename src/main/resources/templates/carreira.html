@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<!--Import materialize.css-->
+<link type="text/css" rel="stylesheet" th:href="@{/css/materialize.min.css}" media="screen,projection" />
+<link type="text/css" rel="stylesheet" th:href="@{/css/dashboardIndex.css}" />
+<!--Let browser know website is optimized for mobile-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Mentor Online</title>
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+<script src="https://code.jquery.com/jquery-1.9.1.js"></script>
+<script type="text/javascript" src="/js/materialize.min.js"></script>
+<script>
+	document.addEventListener('DOMContentLoaded', function() {
+		var elems = document.querySelectorAll('.sidenav');
+		var instances = M.Sidenav.init(elems, 'left');
+	});
+
+	// Initialize collapsible (uncomment the lines below if you use the dropdown variation)
+	// var collapsibleElem = document.querySelector('.collapsible');
+	// var collapsibleInstance = M.Collapsible.init(collapsibleElem, options);
+
+	// Or with jQuery
+
+	$(document).ready(function() {
+		$('.sidenav').sidenav();
+	});
+</script>
+<script type="text/javascript" charset="UTF-8">
+	var nome;
+	var foto;
+	$
+			.ajax({
+				url : '/getPerfil',
+				type : 'GET',
+				success : function(perfil) {
+					nome = perfil[0].nome;
+					foto = perfil[0].foto;
+					$("#nomeUsuario").text(nome);
+					$("#fotoUsuario").innerHTML = '<img th:src="@{${'+ perfil[0].foto+'}" class=\"responsive-img circle\" style=\"margin-left: 35%\">';
+				}
+			});
+</script>
+<script type="text/javascript">
+	$.get("/getCarreiras", function(retorno) {
+		$.each(retorno, function(indice, carreira) {
+			$("#mySelect").append(new Option(carreira.nome, carreira.id));
+			$('select').formSelect();
+		});
+
+	});
+</script>
+<script type="text/javascript">
+	$.get("/getAtividades", function(retorno) {
+		$.each(retorno, function(indice, atividades) {
+			$("#mySelect1").append(new Option(atividades.nome, atividades.id));
+			$('select').formSelect();
+		});
+
+	});
+</script>
+<script type="text/javascript">
+	$.get("/getLeituras", function(retorno) {
+		$.each(retorno, function(indice, leituras) {
+			$("#mySelect2").append(new Option(leituras.nome, leituras.id));
+			$('select').formSelect();
+		});
+
+	});
+</script>
+<script type="text/javascript">
+	document.addEventListener('DOMContentLoaded', function() {
+		var elems = document.querySelectorAll('.tooltipped');
+		var instances = M.Tooltip.init(elems, "left");
+	});
+
+	// Or with jQuery
+
+	$(document).ready(function() {
+		$('.tooltipped').tooltip();
+	});
+</script>
+<script type="text/javascript">
+	$(document).ready(function() {
+		$('.modal').modal();
+		dismissible: true; // Modal can be dismissed by clicking outside of the modal
+
+	});
+</script>
+<script type="text/javascript">
+	$(document)
+			.ready(
+					function() {
+						$('#mySelect1')
+								.change(
+										function refreshPagina() {
+											var itemEscolhido = $(this).find(
+													'option:selected').val();
+											var atividades = JSON
+													.parse(localStorage
+															.getItem("atividades"));
+											for (var i = 0; i < atividades.length; i++) {
+												if (itemEscolhido == atividades[i].id) {
+													document.getElementById('editId').value = atividades[i].id;
+													document.getElementById('editNomeAtividade').value = atividades[i].nome;
+													document.getElementById('editCargaHoraria').value = atividades[i].cargaHoraria;
+													document.getElementById('editCargaHorariaCumprida').value = atividades[i].cargaHorariaCumprida;
+												}
+											}
+										})
+					});
+</script>
+<script type="text/javascript">
+	$(document)
+			.ready(
+					function() {
+						$('#mySelect2')
+								.change(
+										function refreshPagina() {
+											var itemEscolhido = $(this).find(
+													'option:selected').val();
+											var leituras = JSON
+													.parse(localStorage
+															.getItem("leituras"));
+											for (var i = 0; i < leituras.length; i++) {
+												if (itemEscolhido == leituras[i].id) {
+													document.getElementById('editLeituraId').value = leituras[i].id;
+													document.getElementById('editNomeLeitura').value = leituras[i].nome;
+													document.getElementById('editTotalPaginas').value = leituras[i].totalPaginas;
+													document.getElementById('editPaginasLidas').value = leituras[i].paginasLidas;
+												}
+											}
+										})
+					});
+</script>
+<script type="text/javascript">
+	$(document)
+			.ready(
+					function() {
+						$('#mySelect')
+								.change(
+										function refreshPagina() {
+											var chart = new ApexCharts(
+													document
+															.querySelector("#chart_div"),
+													{
+														series : [ 0, 0 ],
+														chart : {
+															width : 380,
+															id : 'mychart',
+															type : 'donut',
+														},
+														labels : [
+																'Carga Horária Não Cumprida',
+																'Carga Horária Cumprida' ],
+														responsive : [ {
+															breakpoint : 480,
+															options : {
+																chart : {
+																	width : 200
+																},
+																legend : {
+																	position : 'bottom'
+																}
+															}
+														} ]
+													});
+											chart.render();
+
+											var cargaHorariaTotal = 0;
+											var cargaHorariaConcluida = 0;
+
+											var itemEscolhido = $(this).find(
+													'option:selected').val();
+											$('#modal2 #idCarreira').val(
+													$(this).find(
+															'option:selected')
+															.text());
+											$('#modal3 #idCarreira').val(
+													$(this).find(
+															'option:selected')
+															.text());
+											var atividades = JSON
+													.parse(localStorage
+															.getItem("atividades"));
+											var leituras = JSON
+													.parse(localStorage
+															.getItem("leituras"));
+											var tabela = document
+													.getElementById("atividadeTable");
+
+											$("#atividadeTable tr").remove();
+											tabela.innerHTML = ' <thead style="color:#26a69a;"> <tr> <th>Id</th>	<th>Nome</th>	<th>Carga Horária</th> <th>Carga Horária cumprida</th> <th>Editar</th> </tr> </thead>'
+											for (var i = 0; i < atividades.length; i++) {
+												if (itemEscolhido == atividades[i].carreiraId) {
+													var numeroLinhas = tabela.rows.length;
+													var linha = tabela
+															.insertRow(numeroLinhas);
+													var celula0 = linha
+															.insertCell(0);
+													var celula1 = linha
+															.insertCell(1);
+													var celula2 = linha
+															.insertCell(2);
+													var celula3 = linha
+															.insertCell(3);
+													var celula4 = linha
+															.insertCell(4);
+
+													celula0.innerHTML = '<span  style="color:#FFFF;" class="id">'
+															+ atividades[i].id
+															+ '</span>';
+													celula1.innerHTML = '<span style="color:#FFFF;" class="nome">'
+															+ atividades[i].nome
+															+ '</span>';
+													celula2.innerHTML = '<span style="color:#FFFF;" class="descricao">'
+															+ atividades[i].cargaHoraria
+															+ '</span>';
+													celula3.innerHTML = '<span style="color:#FFFF;" class="descricao">'
+															+ atividades[i].cargaHorariaCumprida
+															+ '</span>';
+													celula4.innerHTML = '<button data-target="modal4" href="#modal4" class=" modal-trigger btn waves-effect" style="background-color: #26a69a;" type="submit" id="editarAtividade" name="action"><i class="tiny material-icons">edit</i></button>'
+													cargaHorariaTotal = cargaHorariaTotal
+															+ atividades[i].cargaHoraria;
+													cargaHorariaConcluida = cargaHorariaConcluida
+															+ atividades[i].cargaHorariaCumprida;
+													celula0 = null;
+													celula1 = null;
+													celula2 = null;
+													celula3 = null;
+
+												}
+											}
+											var tabelaIdeias = document
+													.getElementById("leituraTable");
+											$("#leituraTable tr").remove();
+											tabelaIdeias.innerHTML = ' <thead style="color:#26a69a;" > <tr> <th>Id</th>	<th>Nome</th>	<th>Total de Páginas</th> <th>Páginas Lidas</th>  <th>Horas</th><th>Editar</th></tr> </thead>'
+											for (var i = 0; i < leituras.length; i++) {
+												if (itemEscolhido == leituras[i].carreiraId) {
+													var numeroLinhas = tabelaIdeias.rows.length;
+													var linha = tabelaIdeias
+															.insertRow(numeroLinhas);
+													var celulaIdeia0 = linha
+															.insertCell(0);
+													var celulaIdeia1 = linha
+															.insertCell(1);
+													var celulaIdeia2 = linha
+															.insertCell(2);
+													var celulaIdeia3 = linha
+															.insertCell(3);
+													var celulaIdeia4 = linha
+															.insertCell(4);
+													var celulaIdeia5 = linha
+													.insertCell(5);
+													celulaIdeia0.innerHTML = '<span style="color:#FFFF;" class="id">'
+															+ leituras[i].id
+															+ '</span>';
+													celulaIdeia1.innerHTML = '<span style="color:#FFFF;" class="nome">'
+															+ leituras[i].nome
+															+ '</span>';
+													celulaIdeia2.innerHTML = '<span style="color:#FFFF;" class="descricao">'
+															+ leituras[i].totalPaginas
+															+ '</span>';
+													celulaIdeia3.innerHTML = '<span style="color:#FFFF;" class="nome">'
+															+ leituras[i].paginasLidas
+															+ '</span>';
+													var horaLivro = (leituras[i].totalPaginas * 3) / 60;
+													var horaLida = (leituras[i].paginasLidas * 3) / 60;
+													celulaIdeia4.innerHTML = '<span style="color:#FFFF;" class="descricao">'
+															+ horaLida
+															+ '</span>';
+															celulaIdeia5.innerHTML = '<button data-target="modal5" href="#modal4" class=" modal-trigger btn waves-effect" style="background-color: #26a69a;" type="submit" id="editarAtividade" name="action"><i class="tiny material-icons">edit</i></button>'
+
+													cargaHorariaTotal = cargaHorariaTotal
+															+ horaLivro;
+													cargaHorariaConcluida = cargaHorariaConcluida
+															+ horaLida;
+												}
+
+											}
+
+											chart.updateSeries(update());
+
+											function update() {
+												let options = {
+													series : [
+															cargaHorariaTotal - cargaHorariaConcluida,
+															cargaHorariaConcluida ],
+													chart : {
+														width : 380,
+														id : 'mychart',
+														type : 'donut',
+													},
+													labels : [ 'Carga Horária Não Cumprida',
+															'Carga Horária Cumprida' ],
+													responsive : [ {
+														breakpoint : 480,
+														options : {
+															chart : {
+																width : 200
+															},
+															legend : {
+																position : 'bottom'
+															}
+														}
+													} ]
+												}
+
+												return options.series;
+											}
+
+										});
+						$.ajax({
+							url : '/getAtividades',
+							type : 'GET',
+							success : function(atividades) {
+								localStorage.setItem("atividades", JSON
+										.stringify(atividades));
+
+							}
+
+						});
+						$.ajax({
+							url : '/getLeituras',
+							type : 'GET',
+							success : function(leituras) {
+								localStorage.setItem("leituras", JSON
+										.stringify(leituras));
+
+							}
+						});
+					});
+</script>
+<script type="text/javascript">
+	$.ajax({
+		url : '/getAtividades',
+		type : 'GET',
+		success : function(atividades) {
+			localStorage.setItem("atividades", JSON.stringify(atividades));
+
+		}
+	});
+</script>
+<script type="text/javascript">
+	$.ajax({
+		url : '/getLeituras',
+		type : 'GET',
+		success : function(ideias) {
+			localStorage.setItem("leituras", JSON.stringify(ideias));
+
+		}
+	});
+</script>
+</head>
+<body>
+	<div th:replace="dashboard/menu :: nav-sidebar ">sidebar</div>
+	<div class="container">
+		<form class="col s12">
+			<div class="row">
+				<div class="input-field col s12">
+					<div class="input-field col s6">
+						<select id="mySelect" style="color: #26a69a;">
+							<option value="" style="color: #26a69a;" disabled selected>Escolha sua Carreira</option>
+						</select><label style="color: #26a69a;">Selecione sua Carreira</label>
+					</div>
+					<div class="col s1"></div>
+					<div>
+						<a data-target="modal1" href="#modal1" class=" modal-trigger btn tooltipped btn-floating btn-small waves-effect waves-light"
+							style="margin-top: 3%; color: #26a69a;" data-position="right" data-tooltip="Adicione um novo empreedimento"> <i class="material-icons">add</i></a>
+					</div>
+				</div>
+			</div>
+		</form>
+		<div class="col s12">
+			<div class="row">
+				<button data-target="modal2" href="#modal2" class=" modal-trigger btn waves-effect  col s4" style="background-color: #26a69a;" type="submit"
+					id="novaTarefa" name="action">Nova Atividade</button>
+				<div class="col s2"></div>
+				<button data-target="modal3" href="#modal3" class=" modal-trigger btn waves-effect  col s4" style="background-color: #26a69a;" type="submit"
+					id="novaTarefa" name="action">Nova Leitura</button>
+			</div>
+		</div>
+		<div class="col s12">
+			<div class="row ">
+				<div class="col s9">
+					<!-- Tabela Tarefa -->
+					<table id="atividadeTable" style="color: #26a69a;">
+						<thead style="color: #26a69a;">
+							<tr>
+								<th>Id</th>
+								<th>Nome</th>
+								<th>Carga Horária</th>
+								<th>Carga Horária cumprida</th>
+							</tr>
+						</thead>
+					</table>
+				</div>
+				<div id="chart_div" class="col s3"></div>
+			</div>
+			<div class="row">
+				<div class="col s8">
+					<!-- Tabela Ideia -->
+					<table id="leituraTable">
+						<thead style="color: #26a69a;">
+							<tr>
+								<th>Id</th>
+								<th>Leitura</th>
+								<th>Nome</th>
+								<th>Total de Páginas</th>
+								<th>Páginas Lidas</th>
+								<th>Horas</th>
+							</tr>
+						</thead>
+					</table>
+				</div>
+			</div>
+		</div>
+		<!-- Modal Carreira -->
+		<div id="modal1" class="modal">
+			<div class="modal-content">
+				<h4>Nova Carreira</h4>
+				<div class="col s12 ">
+					<form class="form" th:action="@{/salvarCarreira}" method="POST" action="">
+						<div class="row">
+							<div class="input-field col s6">
+								<input id="nome" name="nome" type="text" class="validate">
+							</div>
+						</div>
+						<div class="row col s12">
+							<button class="btn waves-effect  col s7" style="background-color: #26a69a;" type="submit" id="submit" name="action">
+								Salvar <i class="material-icons right">send</i>
+							</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		<!-- Modal Atividade -->
+		<div id="modal2" class="modal">
+			<div class="modal-content">
+				<h4>Nova Atividade</h4>
+				<div class="col s12 ">
+					<form class="form" th:action="@{/salvarAtividade}" method="POST" action="">
+						<div class="row">
+							<div class="input-field col s6">
+								<input id="nomeAtividade" name="nomeAtividade" type="text" class="validate"><label for="nomeAtividade" style="color: #26a69a;">Nome
+									da Atividade</label>
+							</div>
+						</div>
+						<div class="row">
+							<div class="input-field col s8">
+								<input id="idCarreira" name="idCarreira" type="text" style="color: #26a69a;">
+							</div>
+						</div>
+						<div class="row">
+							<div class="input-field col s8">
+								<input id="cargaHoraria" name="cargaHoraria" type="text" style="color: #26a69a;"> <label for="cargaHoraria" style="color: #26a69a;">Carga
+									Horária</label>
+							</div>
+						</div>
+						<div class="row">
+							<div class="input-field col s8">
+								<input id=cargaHorariaCumprida name="cargaHorariaCumprida" type="text" style="color: #26a69a;"> <label for="cargaHorariaCumprida"
+									style="color: #26a69a;">Carga Horária Cumprida</label>
+							</div>
+						</div>
+						<div class="row col s12">
+							<button class="btn waves-effect  col s7" style="background-color: #26a69a;" type="submit" id="submit" name="action">
+								Salvar <i class="material-icons right">send</i>
+							</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		<!-- Modal Leitura -->
+		<div id="modal3" class="modal">
+			<div class="modal-content">
+				<h4>Nova Leitura</h4>
+				<div class="col s12 ">
+					<form class="form" th:action="@{/salvarLeitura}" method="POST" action="">
+						<div class="row">
+							<div class="input-field col s6">
+								<input id="nomeLeitura" name="nomeLeitura" type="text" class="validate"><label for="nomeLeitura" style="color: #26a69a;">Nome
+									da Leitura</label>
+							</div>
+						</div>
+						<div class="row">
+							<div class="input-field col s8">
+								<input id="totalPaginas" name="totalPaginas" type="text" style="color: #26a69a;"> <label for="totalPaginas" style="color: #26a69a;">Total
+									de Páginas</label>
+							</div>
+						</div>
+						<div class="row">
+							<div class="input-field col s8">
+								<input id="paginasLidas" name="paginasLidas" type="text" style="color: #26a69a;"> <label for="paginasLidas" style="color: #26a69a;">Páginas
+									Lidas</label>
+							</div>
+						</div>
+						<div class="row">
+							<div class="input-field col s8">
+								<input id="idCarreira" name="idCarreira" type="text" style="color: #26a69a;">
+							</div>
+						</div>
+						<div class="row col s12">
+							<button class="btn waves-effect  col s7" style="background-color: #26a69a;" type="submit" id="submit" name="action">
+								Salvar <i class="material-icons right">send</i>
+							</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		<!-- Modal Editar Atividade -->
+		<div id="modal4" class="modal">
+			<div class="modal-content">
+				<h4>Editar Atividade</h4>
+				<div class="col s12 ">
+					<form class="form" th:action="@{/editarAtividade}" method="POST" action="">
+						<div class="row">
+							<div class="input-field col s9">
+								<select id="mySelect1" style="color: #26a69a;">
+									<option value="" style="color: #26a69a;" disabled selected>Escolha a atividade</option>
+								</select><label style="color: #26a69a;">Selecione a Atividade</label>
+							</div>
+							<div class="input-field">
+								<input id="editId" name="editId" type="hidden" class="validate">
+							</div>
+							<div class="input-field col s6">
+							<span style="color: #26a69a;">Nome da Atividade</span>
+								<input id="editNomeAtividade" name="nomeAtividade" type="text" class="validate">
+							</div>
+						</div>
+						<div class="row">
+							<div class="input-field col s8">
+							<span style="color: #26a69a;">Carga Horária</span>
+								<input id="editCargaHoraria" name="cargaHoraria" type="text" style="color: #26a69a;"> 
+							</div>
+						</div>
+						<div class="row">
+							<div class="input-field col s8">
+								<span style="color: #26a69a;">Carga Horária Cumprida</span>
+								<input id=editCargaHorariaCumprida name="cargaHorariaCumprida" type="text" style="color: #26a69a;"> 
+							</div>
+						</div>
+						<div class="row col s12">
+							<button class="btn waves-effect  col s7" style="background-color: #26a69a;" type="submit" id="submit" name="action">
+								Salvar <i class="material-icons right">send</i>
+							</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		<!-- Modal Edit Leitura -->
+		<div id="modal5" class="modal">
+			<div class="modal-content">
+				<h4>Editar Leitura</h4>
+				<div class="col s12 ">
+					<form class="form" th:action="@{/editarLeitura}" method="POST" action="">
+						<div class="row">
+						<div class="input-field col s9">
+								<select id="mySelect2" style="color: #26a69a;">
+									<option value="" style="color: #26a69a;" disabled selected>Escolha a atividade</option>
+								</select><label style="color: #26a69a;">Selecione a Atividade</label>
+							</div>
+							<div class="input-field col s6">
+							    <span style="color: #26a69a;">Nome da Atividade</span>
+								<input id="editNomeLeitura" name="editNomeLeitura" type="text" class="validate">
+							</div>
+						</div>
+						<div class="row">
+							<div class="input-field col s8">
+							<span style="color: #26a69a;">Total de Páginas</span>
+								<input id="editTotalPaginas" name="editTotalPaginas" type="text" style="color: #26a69a;">
+							</div>
+						</div>
+						<div class="row">
+							<div class="input-field col s8">
+							<span style="color: #26a69a;">Páginas Lidas</span>
+								<input id="editPaginasLidas" name="editPaginasLidas" type="text" style="color: #26a69a;">
+							</div>
+						</div>
+						<div class="row">
+							<div class="input-field col s8">
+							
+								<input id="editLeituraId" name="editLeituraId" type="hidden" style="color: #26a69a;">
+							</div>
+						</div>
+						<div class="row col s12">
+							<button class="btn waves-effect  col s7" style="background-color: #26a69a;" type="submit" id="submit" name="action">
+								Salvar <i class="material-icons right">send</i>
+							</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	 <!-- Modal Structure -->
+  <div id="modalShare" class="modal">
+    <div class="modal-content">
+     			<h4>Compartilhe</h4>
+				<div class="col s12 ">
+					<form class="form" th:action="@{/compartilhar}" method="POST" action="">
+						<div class="row">
+							<div class="input-field col s12">
+								<input id="nome" name="nome" type="text" class="validate"><label for="nome" style="color: #26a69a;">Nome da
+									Pessoa</label>
+							</div>
+							<div class="input-field col s12">
+								<input id="username" name="username" type="text" class="validate"><label for="username" style="color: #26a69a;">Username</label>
+							</div>
+							<div class="input-field col s12">
+								<input id="email" name="email" type="text" class="validate"><label for="email" style="color: #26a69a;">Email</label>
+							</div>
+						</div>
+						<div class="row col s12">
+							<button class="btn waves-effect  col s7" style="background-color: #26a69a;" type="submit" id="submit" name="action">
+								Salvar <i class="material-icons right">send</i>
+							</button>
+						</div>
+					</form>
+				</div>
+  </div>
+	</div>
+</body>
+</html>

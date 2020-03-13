@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+<meta charset="UTF-8" />
+<link
+	href="https://fonts.googleapis.com/css?family=Quicksand&display=swap"
+	rel="stylesheet">
+<!--Import materialize.css-->
+<link type="text/css" rel="stylesheet"
+	th:href="@{/css/materialize.min.css}" media="screen,projection" />
+<link type="text/css" rel="stylesheet" th:href="@{/css/erro.css}" />
+<!--Let browser know website is optimized for mobile-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Oops...</title>
+</head>
+<body>
+	<div id="erro-box">
+		<h4>Desculpe o transtorno</h4>
+		<h6>Não conte pra ninguém, mas estamos com problemas!</h5>
+		<a style="margin-left: 22%; margin-top: 5%;"
+			class="waves-effect waves-light btn-large" th:href="@{/}"> Home</a>
+	</div>
+</body>
+</html>

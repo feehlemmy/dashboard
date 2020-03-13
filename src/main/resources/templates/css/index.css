@@ -1,0 +1,36 @@
+html{
+background-image: linear-gradient(to right bottom, #041125, #191e2e, #2b2c37, #3b3b40, #4a4a4a);
+height: 100%;
+width: 100%;
+}
+#login-page {
+height: 0;
+  position: absolute;
+  top: 50%;
+  /* posiciona na metade da tela */
+  margin-top: -10%;
+  /* e retrocede metade da altura */
+  left: 50%;
+  /* posiciona na metade da tela */
+  margin-left: -10%;
+  /* e retrocede metade da largura */
+}
+
+.card {
+    position: relative;
+    left: 50%;
+    top: 50%;
+    -moz-transform: translate(-50%, -50%);
+     -webkit-transform: translate(-50%, -50%);
+      -ms-transform: translate(-50%, -50%);
+       -o-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+}
+#submit{
+margin-left: 55%;
+}
+
+#forget-password{
+margin-left: -10%;
+margin-top: -15%;
+}

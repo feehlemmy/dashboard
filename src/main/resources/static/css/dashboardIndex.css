@@ -1,0 +1,55 @@
+html {
+	background-image: linear-gradient(to right bottom, #041125, #191e2e, #2b2c37, #3b3b40,
+		#4a4a4a);
+	height: 200%;
+	width: 100%;
+}
+
+.div-select {
+	width: 250px; /* Tamanho final do select */
+	overflow: hidden;
+	/* Esconde o conteúdo que passar do tamanho especificado */
+}
+
+#nav-bar {
+	background-color: #26a69a;
+	width: 100%
+}
+
+#user-view {
+	background-image: linear-gradient(to right, #26a69a, #25999b, #308c97, #3d7e8f, #477183);
+}
+
+#cabecalho {
+	background-color: #FFFF;
+}
+
+.apexcharts-legend-text {
+
+		background-color:white;
+	
+}
+
+::-webkit-select {
+	color: #26a69a;
+}
+
+::-webkit-input-placeholder {
+	color: #26a69a;
+}
+
+:-moz-placeholder { /* Firefox 18- */
+	color: #26a69a;
+}
+
+::-moz-placeholder { /* Firefox 19+ */
+	color: #26a69a;
+}
+
+:-ms-input-placeholder {
+	color: #26a69a;
+}
+
+:-ms-select-placeholder {
+	color: #26a69a;
+}

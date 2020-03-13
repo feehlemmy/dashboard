@@ -1,0 +1,13 @@
+html {
+    background-image: linear-gradient(to right bottom, #041125, #191e2e, #2b2c37, #3b3b40, #4a4a4a);
+    height: 100%;
+    width: 100%;
+}
+
+#nav-bar{
+    background-color: #26a69a;
+}
+#nomeUsuario{
+text-align: left;
+color: #6D5353;
+}

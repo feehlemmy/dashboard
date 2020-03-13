@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<!--Import materialize.css-->
+<link type="text/css" rel="stylesheet" th:href="@{/css/materialize.min.css}" media="screen,projection" />
+<link type="text/css" rel="stylesheet" th:href="@{/css/dashboardIndex.css}" />
+<!--Let browser know website is optimized for mobile-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Mentor Online</title>
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+<script src="https://code.jquery.com/jquery-1.9.1.js"></script>
+<script type="text/javascript" src="/js/materialize.min.js"></script>
+<script>
+	document.addEventListener('DOMContentLoaded', function() {
+		var elems = document.querySelectorAll('.sidenav');
+		var instances = M.Sidenav.init(elems, 'left');
+	});
+
+	// Initialize collapsible (uncomment the lines below if you use the dropdown variation)
+	// var collapsibleElem = document.querySelector('.collapsible');
+	// var collapsibleInstance = M.Collapsible.init(collapsibleElem, options);
+
+	// Or with jQuery
+
+	$(document).ready(function() {
+		$('.sidenav').sidenav();
+	});
+</script>
+
+<script type="text/javascript">
+	$(document).ready(function() {
+		$('.modal').modal();
+		dismissible: true; // Modal can be dismissed by clicking outside of the modal
+
+	});
+</script>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('.tooltipped');
+    var instances = M.Tooltip.init(elems, options);
+  });
+
+  // Or with jQuery
+
+  $(document).ready(function(){
+    $('.tooltipped').tooltip();
+  });
+</script>
+<script type="text/javascript" charset="UTF-8">
+	var nome;
+	var foto;
+	$
+			.ajax({
+				url : '/getPerfil',
+				type : 'GET',
+				success : function(perfil) {
+					nome = perfil[0].nome;
+					foto = perfil[0].foto;
+					$("#nomeUsuario").text(nome);
+					var images_div = "<img th:src=\""
+							+ perfil[0].foto
+							+ "\"   class=\"responsive-img circle\" style=\"margin-left: 35%\">";
+					$("#fotoUsuario").append(images_div)
+				}
+			});
+</script>
+<script type="text/javascript">
+	$.ajax({
+		url : '/getMemes',
+		type : 'GET',
+		success : function(memes) {
+			localStorage.setItem("memes", JSON.stringify(memes));
+		if(memes != null){
+			buildChart(memes);
+		}
+		}
+	});
+	function buildChart(meme){
+		console.log(meme)
+		   var options = {
+			          series: [parseInt(meme[0].resultado,10), parseInt(meme[1].resultado,10), parseInt(meme[2].resultado,10), parseInt(meme[3].resultado,10), parseInt(meme[4].resultado,10), parseInt(meme[5].resultado,10)],
+			          colors:[ meme[0].cor, meme[1].cor, meme[2].cor, meme[3].cor, meme[4].cor, meme[5].cor],
+			          chart: {
+			          type: 'donut',
+			        },
+		            labels : [ meme[0].nome, meme[1].nome, meme[2].nome, meme[3].nome, meme[4].nome, meme[5].nome],
+			        responsive: [{
+			          breakpoint: 480,
+			          options: {
+			            chart: {
+			              width: 200
+			            },
+			            legend: {
+			              position: 'bottom'
+			            }
+			          }
+			        }]
+			        };
+
+			        var chart = new ApexCharts(document.querySelector("#chart"), options);
+			        chart.render();
+		
+	}
+</script>
+</head>
+<body>
+	<div th:replace="dashboard/menu :: nav-sidebar ">sidebar</div>
+	<div class="container">
+		<div class="row" style="margin-top: 5%">
+			<form th:action="@{/importarTeste}" method="POST" enctype="multipart/form-data">
+				<input type="file" accept=".xlsx,application/msexcel" th:name="file" required="required"> 
+				<input class="btn waves-effect" style="background-color: #26a69a; color: #FFFFFF;" th:type="submit" value="Importar" /> 
+				<a href="https://drive.google.com/file/d/1tN7CV9dKPrpuU5gljU5bfMCtqPp-aWb3/view?usp=sharing" class="btn waves-effect" style="background-color: #26a69a;">Download template</a>
+			</form>
+		</div>
+		<div class="col s12">
+		<div class="row">
+			<div class="col s6" id="chart"></div>
+			<div class="col s2"></div>
+			<div class="col s4">
+			<span style="color: #FFFF; margin-left: 15%">Legendas</span><p>
+			  <a style="background-color: #FD0000; width: 100px;" class="btn tooltipped" data-position="right" data-tooltip="AGRESSIVO, IMPULSIVO GUERREIRO. SURGEM OS VALORES INDIVIDUAIS E O EGO. É
+HEDONISTA E HERÓICO">Vermelho</a><p>
+			  <a style="background-color: #2EFF00; width: 100px;" class="btn tooltipped" data-position="right" data-tooltip="PÓS MODERNO E ORIENTADO PELO MUNDO. TEM SENSO DE JUSTIÇA E PREOCUPAÇÃO
+ECOLÓGICA. É EMOTIVO E PREGA A IGUALDADE. PROCURA O CONSENSO E BUSCA A
+HARMONIA.">Verde   </a><p>
+			  <a style="background-color: #8500FD; width: 100px;" class="btn tooltipped" data-position="right" data-tooltip="TRIBAL. DEVE LEALDADE AO CLÃ E ACREDITA NA MÍSTICA COLETIVA; CULTUA SÍMBOLOS E
+RITOS DE PASSAGEM.">Roxo</a><p>
+			  <a style="background-color: #00FFBA; width: 100px;" class="btn tooltipped" data-position="right" data-tooltip="PRIORIZA AUNIÃO MENTE E ESPÍRITO. É INDIVIDUALIZADO, MA SINCORPORADO AO TODO. É
+HOLÍSITICO E INTUITIVO. SUA VISÃO DE MUNDO É UM ORGANISMO INTEGRADO.">Turquesa</a><p>
+			  <a style="background-color: #0004FD; width: 100px;" class="btn tooltipped" data-position="right" data-tooltip="CULTUA VALORES TRADICIONAIS, A LEI E A ORDEM. TEM ORGANIZAÇÃO E PROPÓSITO. É
+ETNOCÊNTRICO E SEGUE A HIERARQUIA">Azul</a><p>
+			  <a style="background-color: #FDFF00; width: 100px;" class="btn tooltipped" data-position="right" data-tooltip="VÊ O TODO E RECONHECE O VALOR DE CADA UM DOS SISTEMA ANTERIORES. É INTERATIVO E
+CRIATIVO. ORIENTADO DE DENTRO PARA FORA. NÃO SEGUE HIERARQUIAS
+">Amarelo</a><p>
+			  <a style="background-color: #FF7100; width: 100px;" class="btn tooltipped" data-position="right" data-tooltip="MODERNO E AUTOORIENTADO. RACIONAL E COMPETITIVO. MOTIVADO PELO SUCESSO, JOGA
+PARA GANHAR. MANIPULA RECURSOS NATURAIS EM NOME DO PROGRESSO
+">Laranja</a><p>
+			</div>
+			</div>
+		</div>
+		 <!-- Modal Structure -->
+  <div id="modalShare" class="modal">
+    <div class="modal-content">
+     			<h4>Compartilhe</h4>
+				<div class="col s12 ">
+					<form class="form" th:action="@{/compartilhar}" method="POST" action="">
+						<div class="row">
+							<div class="input-field col s12">
+								<input id="nome" name="nome" type="text" class="validate"><label for="nome" style="color: #26a69a;">Nome da
+									Pessoa</label>
+							</div>
+							<div class="input-field col s12">
+								<input id="username" name="username" type="text" class="validate"><label for="username" style="color: #26a69a;">Username</label>
+							</div>
+							<div class="input-field col s12">
+								<input id="email" name="email" type="text" class="validate"><label for="email" style="color: #26a69a;">Email</label>
+							</div>
+						</div>
+						<div class="row col s12">
+							<button class="btn waves-effect  col s7" style="background-color: #26a69a;" type="submit" id="submit" name="action">
+								Salvar <i class="material-icons right">send</i>
+							</button>
+						</div>
+					</form>
+				</div>
+  </div>
+	</div>
+	</div>
+</body>
+</html>

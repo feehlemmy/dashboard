@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<head>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+	rel="stylesheet">
+<!--Import materialize.css-->
+<link type="text/css" rel="stylesheet"
+	th:href="@{/css/materialize.min.css}" media="screen,projection" />
+<link type="text/css" rel="stylesheet"
+	th:href="@{/css/administrativo.css}" />
+<!--Let browser know website is optimized for mobile-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Área Administrativa</title>
+
+</head>
+
+<body id="page-top">
+		<!-- Page Wrapper -->
+		<div id="wrapper">
+	
+			<div th:replace="administrativo/menu :: nav-sidebar ">sidebar</div>
+	
+			<!-- Content Wrapper -->
+			<div id="content-wrapper" class="d-flex flex-column">
+				<!-- Main Content -->
+				<div id="content">
+					<!-- Begin Page Content -->
+					<section layout:fragment="cadastro">
+						<div class="container-fluid">conteudo principal das páginas</div>
+					</section>
+				</div>
+			</div>
+		</div>
+	<!--JavaScript at end of body for optimized loading-->
+	<script src="https://code.jquery.com/jquery-1.9.1.js"></script>
+	<script type="text/javascript" src="/js/materialize.min.js"></script>
+		<script type="text/javascript" charset="UTF-8">
+    
+        var nome;
+        var foto;
+     
+        
+            
+        $.ajax({
+            url: '/getPerfil',
+            type: 'GET',
+            success: function (perfil) {
+                nome = perfil[0].nome;
+                foto = perfil[0].foto;
+                foto = foto.substr(65);
+                $("#nomeUsuario").text(nome);
+                console.log( perfil[0].foto)
+                var images_div = "<img th:src=\""+perfil[0].foto+ "\"   class=\"responsive-img circle\" style=\"margin-left: 35%\">";
+                $("#fotoUsuario").append(images_div)
+                            }
+        });
+        
+    </script>
+	<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var elems = document.querySelectorAll('.sidenav');
+        var instances = M.Sidenav.init(elems, 'left');
+      });
+
+      // Initialize collapsible (uncomment the lines below if you use the dropdown variation)
+      // var collapsibleElem = document.querySelector('.collapsible');
+      // var collapsibleInstance = M.Collapsible.init(collapsibleElem, options);
+
+      // Or with jQuery
+
+      $(document).ready(function(){
+        $('.sidenav').sidenav();
+      });
+      </script>
+</body>
+
+</html>
