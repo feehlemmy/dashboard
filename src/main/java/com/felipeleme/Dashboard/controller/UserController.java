@@ -162,7 +162,7 @@ public class UserController {
 		return "error";
 	    }
 	}
-	return "cadastro";
+	return "administrativo/cadastro";
     }
 
     @GetMapping("/listarUsuarios")
