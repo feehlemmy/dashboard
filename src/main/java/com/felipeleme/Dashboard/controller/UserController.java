@@ -84,6 +84,8 @@ public class UserController {
 		session.removeAttribute("usuarioLogado");
 	    }
 	    if (username.equals("admin")) {
+			System.out.println(" *************** ADMIN ********************");
+
 		sessaoatual = service.verifyLogin(username, senha);
 		session.setAttribute("usuarioLogado", sessaoatual);
 		retorno = "administrativo/listarUsuarios";
