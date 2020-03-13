@@ -97,8 +97,11 @@ public class UserController {
 		    retorno = "dashboardIndex";
 		}
 		 if (!sessaoatual.isVisitante()) {
+			 System.out.println(" *************** Não sou visitante ********************");
 		 	sessaoatual = service.verifyLogin(username, senha);
-            session.setAttribute("usuarioLogado", sessaoatual);
+			session.setAttribute("usuarioLogado", sessaoatual);
+			System.out.println("Eu sou" + sessaoatual.getUsername());
+
 		    retorno = "dashboardIndex";
 		}
 	}
