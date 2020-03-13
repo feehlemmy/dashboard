@@ -96,9 +96,8 @@ public class UserController {
 		    session.setAttribute("usuarioLogado", pai);
 		    retorno = "dashboardIndex";
 		} else {
+            session.setAttribute("usuarioLogado", sessaoatual);
 		    retorno = "dashboardIndex";
-		    session.setAttribute("usuarioLogado", sessaoatual);
-
 		}
 	    }
 	    if (sessaoatual.getUsername().equals(null)) {
