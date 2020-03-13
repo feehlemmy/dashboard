@@ -152,8 +152,9 @@ public class UserController {
 	if (!sessaoatual.isVisitante()) {
 	    String senhaAleatoria;
 	    senhaAleatoria = service.gerarSenhaAleatoria();
-	    usuario.setSenha(senhaAleatoria);
-
+		usuario.setSenha(senhaAleatoria);
+		usuario.setVisitante(false);
+		usuario.setUsuarioCriador(sessaoatual.getUsername());
 	    try {
 		service.cadastrar(usuario);
 		emailService.sendEmail(usuario);
