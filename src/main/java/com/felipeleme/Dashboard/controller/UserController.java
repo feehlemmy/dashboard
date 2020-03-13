@@ -89,21 +89,18 @@ public class UserController {
 		retorno = "administrativo/listarUsuarios";
 		} 
 		if (!username.equals("admin")) {
-		sessaoatual = service.verifyLogin(username, senha);
 		if (sessaoatual.isVisitante()) {
+			sessaoatual = service.verifyLogin(username, senha);
 		    Usuario pai = service.getUserByUsername(sessaoatual.getUsuarioCriador());
 		    pai.setVisitante(true);
 		    session.setAttribute("usuarioLogado", pai);
 		    retorno = "dashboardIndex";
 		}
 		 if (!sessaoatual.isVisitante()) {
+		 	sessaoatual = service.verifyLogin(username, senha);
             session.setAttribute("usuarioLogado", sessaoatual);
 		    retorno = "dashboardIndex";
 		}
-	    if (sessaoatual.getId() == null) {
-			attr.addFlashAttribute("fail", "username ou senha incorretos. Tente novamente.");
-			retorno = "index";
-	    }
 	}
 	return retorno;
 
