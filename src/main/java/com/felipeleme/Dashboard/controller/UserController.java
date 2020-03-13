@@ -92,6 +92,8 @@ public class UserController {
 		} 
 		if (!username.equals("admin")) {
 		if (sessaoatual.isVisitante()) {
+			System.out.println(" *************** "+ sessaoatual.isVisitante()+ "********************");
+
 			sessaoatual = service.verifyLogin(username, senha);
 		    Usuario pai = service.getUserByUsername(sessaoatual.getUsuarioCriador());
 		    pai.setVisitante(true);
