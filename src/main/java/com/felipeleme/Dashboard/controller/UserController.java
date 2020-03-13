@@ -98,7 +98,8 @@ public class UserController {
 		    session.setAttribute("usuarioLogado", pai);
 		    retorno = "dashboardIndex";
 		}
-		 if (!sessaoatual.isVisitante()) {
+		Boolean visitante = sessaoatual.isVisitante();
+		 if (!sessaoatual.isVisitante() || visitante != null) {
 			 System.out.println(" *************** Não sou visitante ********************");
 		 	sessaoatual = service.verifyLogin(username, senha);
 			session.setAttribute("usuarioLogado", sessaoatual);

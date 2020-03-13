@@ -91,6 +91,12 @@ public class Usuario extends AbstractEntity<Long> {
 	}
 
 	/**
+	 * @return the visitante
+	 */
+	public boolean getVisitante() {
+		return visitante;
+	}
+	/**
 	 * @return the usuarioCriador
 	 */
 	public String getUsuarioCriador() {
