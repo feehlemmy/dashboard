@@ -28,7 +28,7 @@ public class Usuario extends AbstractEntity<Long> {
 	private String foto;
 	
 	@Column(name = "visitante", nullable = true)
-	private boolean visitante;
+	private Boolean visitante;
 	
 	@Column(name = "usuario_criador", nullable = true)
 	private String usuarioCriador;
@@ -86,7 +86,7 @@ public class Usuario extends AbstractEntity<Long> {
 	/**
 	 * @return the visitante
 	 */
-	public boolean isVisitante() {
+	public Boolean isVisitante() {
 	    return visitante;
 	}
 
@@ -106,7 +106,7 @@ public class Usuario extends AbstractEntity<Long> {
 	/**
 	 * @param visitante the visitante to set
 	 */
-	public void setVisitante(boolean visitante) {
+	public void setVisitante(Boolean visitante) {
 	    this.visitante = visitante;
 	}
 
