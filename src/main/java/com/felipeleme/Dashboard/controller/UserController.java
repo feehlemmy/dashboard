@@ -72,7 +72,6 @@ public class UserController {
     public String entrar(HttpSession session, RedirectAttributes attr, Usuario usuario) throws Exception {
 	String username = usuario.getUsername();
 	String senha = usuario.getSenha();
-	String retorno = "index";
 	Usuario sessaoatual = new Usuario();
 	sessaoatual = (Usuario) session.getAttribute("usuarioLogado");
 	if (username.equals(null)) {
@@ -103,7 +102,7 @@ public class UserController {
 		    session.setAttribute("usuarioLogado", pai);
 		    return  "dashboardIndex";
 		}
-		if (!sessaoatual.isVisitante() && sessaoatual.isVisitante() != null) {
+		if (!sessaoatual.isVisitante()) {
 		    System.out.println(" *************** Não sou visitante ********************");
 		 	sessaoatual = service.verifyLogin(username, senha);
 			session.setAttribute("usuarioLogado", sessaoatual);
