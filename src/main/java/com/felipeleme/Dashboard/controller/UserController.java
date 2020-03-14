@@ -79,6 +79,9 @@ public class UserController {
 	    return "index";
 	}
 	try {
+		System.out.println(" *************** " + username + " ********************");
+		System.out.println(" *************** " + senha + " ********************");
+
 		System.out.println(" *************** "+ sessaoatual +" ********************");
 
 	    if (sessaoatual != null) {
