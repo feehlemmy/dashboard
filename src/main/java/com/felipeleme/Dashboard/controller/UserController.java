@@ -89,9 +89,8 @@ public class UserController {
 		sessaoatual = service.verifyLogin(username, senha);
 		session.setAttribute("usuarioLogado", sessaoatual);
 		retorno = "administrativo/listarUsuarios";
-		} 
-		if (!username.equals("admin")) {
-		if (sessaoatual.isVisitante()) {
+		}
+		if (sessaoatual.isVisitante() && sessaoatual.isVisitante() != null) {
 			System.out.println(" *************** "+ sessaoatual.isVisitante()+ "********************");
 
 			sessaoatual = service.verifyLogin(username, senha);
@@ -107,7 +106,7 @@ public class UserController {
 			System.out.println("Eu sou" + sessaoatual.getUsername());
 
 		    retorno = "dashboardIndex";
-		}
+		
 		return retorno;
 	} catch (Exception e) {
 	    attr.addFlashAttribute("fail", "username ou senha incorretos. Tente novamente.");
