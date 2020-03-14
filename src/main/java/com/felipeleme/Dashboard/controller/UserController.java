@@ -80,6 +80,8 @@ public class UserController {
 	    retorno = "index";
 	}
 	try {
+		System.out.println(" *************** "+ sessaoatual +" ********************");
+
 	    if (sessaoatual != null) {
 		session.removeAttribute("usuarioLogado");
 	    }
@@ -90,6 +92,8 @@ public class UserController {
 		session.setAttribute("usuarioLogado", sessaoatual);
 		retorno = "administrativo/listarUsuarios";
 		}
+		System.out.println(" *************** Visitante? ********************");
+
 		if (sessaoatual.isVisitante() && sessaoatual.isVisitante() != null) {
 			System.out.println(" *************** "+ sessaoatual.isVisitante()+ "********************");
 
@@ -106,8 +110,10 @@ public class UserController {
 			System.out.println("Eu sou" + sessaoatual.getUsername());
 
 		    retorno = "dashboardIndex";
-		
+			System.out.println(" *************** retorno ********************");
+
 		return retorno;
+
 	} catch (Exception e) {
 	    attr.addFlashAttribute("fail", "username ou senha incorretos. Tente novamente.");
 	    return "index";
