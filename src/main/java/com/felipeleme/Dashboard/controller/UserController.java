@@ -108,9 +108,7 @@ public class UserController {
 
 		    retorno = "dashboardIndex";
 		}
-	}
-	return retorno;
-
+		return retorno;
 	} catch (Exception e) {
 	    attr.addFlashAttribute("fail", "username ou senha incorretos. Tente novamente.");
 	    return "index";
