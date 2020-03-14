@@ -77,7 +77,7 @@ public class UserController {
 	sessaoatual = (Usuario) session.getAttribute("usuarioLogado");
 	if (username.equals(null)) {
 	    attr.addFlashAttribute("fail", "username ou senha incorretos. Tente novamente.");
-	    retorno = "index";
+	    return "index";
 	}
 	try {
 		System.out.println(" *************** "+ sessaoatual +" ********************");
@@ -90,7 +90,7 @@ public class UserController {
 
 		sessaoatual = service.verifyLogin(username, senha);
 		session.setAttribute("usuarioLogado", sessaoatual);
-		retorno = "administrativo/listarUsuarios";
+		return "administrativo/listarUsuarios";
 		}
 		System.out.println(" *************** Visitante? ********************");
 	    if (!username.equals("admin")) {
@@ -101,7 +101,7 @@ public class UserController {
 		    Usuario pai = service.getUserByUsername(sessaoatual.getUsuarioCriador());
 		    pai.setVisitante(true);
 		    session.setAttribute("usuarioLogado", pai);
-		    retorno = "dashboardIndex";
+		    return  "dashboardIndex";
 		}
 		if (!sessaoatual.isVisitante() && sessaoatual.isVisitante() != null) {
 		    System.out.println(" *************** Não sou visitante ********************");
@@ -109,16 +109,16 @@ public class UserController {
 			session.setAttribute("usuarioLogado", sessaoatual);
 			System.out.println("Eu sou" + sessaoatual.getUsername());
 
-		    retorno = "dashboardIndex";
-			System.out.println(" *************** retorno ********************");
+		    return "dashboardIndex";
 	}
 }
-		return retorno;
+		
 
 	} catch (Exception e) {
 	    attr.addFlashAttribute("fail", "username ou senha incorretos. Tente novamente.");
 	    return "index";
 	}
+	return "/";
     }
 
 	@GetMapping("/administrativo")
