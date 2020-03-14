@@ -112,6 +112,7 @@ public class UserController {
 		    retorno = "dashboardIndex";
 			System.out.println(" *************** retorno ********************");
 	}
+}
 		return retorno;
 
 	} catch (Exception e) {
