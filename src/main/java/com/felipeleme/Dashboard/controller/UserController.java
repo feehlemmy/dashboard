@@ -93,7 +93,7 @@ public class UserController {
 		retorno = "administrativo/listarUsuarios";
 		}
 		System.out.println(" *************** Visitante? ********************");
-
+	    if (!username.equals("admin")) {
 		if (sessaoatual.isVisitante() && sessaoatual.isVisitante() != null) {
 			System.out.println(" *************** "+ sessaoatual.isVisitante()+ "********************");
 
@@ -103,7 +103,7 @@ public class UserController {
 		    session.setAttribute("usuarioLogado", pai);
 		    retorno = "dashboardIndex";
 		}
-		
+		if (!sessaoatual.isVisitante() && sessaoatual.isVisitante() != null) {
 		    System.out.println(" *************** Não sou visitante ********************");
 		 	sessaoatual = service.verifyLogin(username, senha);
 			session.setAttribute("usuarioLogado", sessaoatual);
@@ -111,7 +111,7 @@ public class UserController {
 
 		    retorno = "dashboardIndex";
 			System.out.println(" *************** retorno ********************");
-
+	}
 		return retorno;
 
 	} catch (Exception e) {
